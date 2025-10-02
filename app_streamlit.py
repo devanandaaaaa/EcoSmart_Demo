@@ -6,31 +6,24 @@ import joblib, json
 
 API_URL = "http://127.0.0.1:5000"
 
-# Streamlit page setup
 st.set_page_config(page_title="EcoSmart Demo", page_icon="⚡", layout="centered")
 st.title("⚡ EcoSmart Energy Demo")
 st.markdown("### Smart Prediction & Energy-Saving Recommendations")
 st.write("This demo predicts appliance energy usage and suggests actions to save power using Machine Learning.")
 st.markdown("---")
-
-# 🔍 Prediction section
 st.subheader("🔍 Latest Prediction")
 
 if st.button("Predict Latest Sample"):
     r = requests.post(f"{API_URL}/predict", json={})
     data = r.json()
-
-    # Metrics in two columns
     col1, col2 = st.columns(2)
     with col1:
         st.metric("Predicted Energy (Wh)", f"{data['prediction']:.1f}")
     with col2:
         st.metric("Threshold", f"{data['threshold']:.1f}")
-
-    # Recommendation
     if data['action'] == "reduce":
         st.error("⚠️ Recommendation: Reduce non-essential appliances")
-        if st.button("💡 Simulate OFF Plug1"):
+        if st.button("Simulate OFF Plug1"):
             payload = {
                 "device_id": "plug1",
                 "action": "OFF",
@@ -40,12 +33,10 @@ if st.button("Predict Latest Sample"):
             rc = requests.post(f"{API_URL}/control", json=payload)
             st.success("Simulated OFF action logged!")
     else:
-        st.success("✅ No action needed")
+        st.success("No action needed")
 
 st.markdown("---")
-
-# 📊 Recent Usage Trend
-st.subheader("📊 Recent Usage Trend (last 24 samples)")
+st.subheader("Recent Usage Trend (last 24 samples)")
 
 try:
     df = pd.read_excel("cleaned_energydata.csv.xlsx")
@@ -65,9 +56,7 @@ except Exception as e:
     st.info("No dataset available for trend plot.")
 
 st.markdown("---")
-
-# 📌 Feature Importance
-st.subheader("📌 Feature Importance (Model Insights)")
+st.subheader("Feature Importance (Model Insights)")
 
 try:
     model = joblib.load("energy_predictor_model.joblib")
@@ -91,8 +80,7 @@ except Exception as e:
 
 st.markdown("---")
 
-# 🎯 Actual vs Predicted Scatter Plot
-st.subheader("🎯 Actual vs Predicted Energy Usage")
+st.subheader("Actual vs Predicted Energy Usage")
 
 try:
     df = pd.read_excel("cleaned_energydata.csv.xlsx")
@@ -112,7 +100,7 @@ try:
     y_true = df['Appliances'].values
     y_pred = model.predict(X)
 
-    sample_size = 200  # limit for plotting
+    sample_size = 200  
     fig, ax = plt.subplots(figsize=(6, 6))
     ax.scatter(y_true[:sample_size], y_pred[:sample_size], alpha=0.5, color="purple")
     ax.plot([0, max(y_true[:sample_size])], [0, max(y_true[:sample_size])], 'r--')
@@ -123,5 +111,4 @@ try:
 
 except Exception as e:
     st.info("Could not generate Actual vs Predicted plot.")
-
 

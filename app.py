@@ -42,4 +42,5 @@ def control():
     return jsonify({"status": "success", "device": device_id, "action": action})
 
 if __name__ == "__main__":
-    app.run(port=5000, debug=True)
+    app.run(port=5000, debug=True)                                
+

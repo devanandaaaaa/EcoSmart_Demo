@@ -6,7 +6,7 @@ A machine learning–powered prototype to **predict appliance energy usage** and
 👥 Team Members
 - Neha – Data Collection & Preprocessing  
 - Anamika – Exploratory Data Analysis  
-- Devananda – Machine Learning Model Development  
+- Devananda – Machine Learning Model Development and prototype demo
 - Arunika – System Design, Documentation & Presentation  
 
 ---
